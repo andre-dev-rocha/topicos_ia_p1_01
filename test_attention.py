@@ -1,13 +1,17 @@
 import numpy as np
 from attention import scaled_dot_product_attention
 
-def teste_formato_saida():
-    Q = np.random.rand(3, 4)
-    K = np.random.rand(5, 4)
-    V = np.random.rand(5, 2)
+def testar_calculo():
+    Q = np.array([[1.0, 0.0], [0.0, 1.0]])
+    K = np.array([[1.0, 0.0], [0.0, 1.0]])
+    V = np.array([[10.0], [20.0]])
+    
     saida, pesos = scaled_dot_product_attention(Q, K, V)
-    assert saida.shape == (3, 2)
-    print("Teste de formato passou!")
+    
+    # Verifica se os pesos somam 1 (Requisito do Softmax) [cite: 35]
+    assert np.allclose(pesos.sum(axis=1), 1.0)
+    print("Teste de soma dos pesos: OK")
+    print("Saída calculada:\n", saida)
 
 if __name__ == "__main__":
-    teste_formato_saida()
+    testar_calculo()
