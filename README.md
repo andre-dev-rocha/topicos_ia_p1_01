@@ -26,3 +26,11 @@ python test_attention.py
 $$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V$$
 
 ---
+
+## Explicação do Scaling Factor (√dₖ)
+
+Quando a dimensão das keys **dₖ** é grande, os produtos escalares `Q · Kᵀ` crescem em magnitude de forma proporcional a **dₖ**. Isso ocorre porque cada elemento do produto escalar é uma soma de **dₖ** termos, e a variância dessa soma cresce linearmente com **dₖ**.
+
+Valores muito grandes empurram o softmax para regiões de saturação, onde o gradiente é próximo de zero — dificultando o aprendizado por backpropagation. Dividir os scores por **√dₖ** normaliza a variância para ~1, independente da dimensão, mantendo o softmax em uma região de gradiente saudável.
+
+---
