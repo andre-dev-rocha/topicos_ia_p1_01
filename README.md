@@ -34,3 +34,63 @@ Quando a dimensão das keys **dₖ** é grande, os produtos escalares `Q · Kᵀ
 Valores muito grandes empurram o softmax para regiões de saturação, onde o gradiente é próximo de zero — dificultando o aprendizado por backpropagation. Dividir os scores por **√dₖ** normaliza a variância para ~1, independente da dimensão, mantendo o softmax em uma região de gradiente saudável.
 
 ---
+
+## Exemplo de Input/Output
+
+```python
+import numpy as np
+from attention import scaled_dot_product_attention
+
+Q = np.array([
+    [1.0, 0.0, 1.0, 0.0],
+    [0.0, 1.0, 0.0, 1.0],
+    [1.0, 1.0, 0.0, 0.0],
+])
+
+K = np.array([
+    [1.0, 0.0, 1.0, 0.0],
+    [0.0, 1.0, 0.0, 1.0],
+    [1.0, 1.0, 1.0, 1.0],
+])
+
+V = np.array([
+    [1.0, 0.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0],
+])
+
+output, attention_weights = scaled_dot_product_attention(Q, K, V)
+```
+
+**Pesos de Atenção** (cada linha soma 1.0):
+
+```
+[[0.422319  0.155362  0.422319]
+ [0.155362  0.422319  0.422319]
+ [0.274069  0.274069  0.451863]]
+```
+
+**Saída** (shape 3×3):
+
+```
+[[0.422319  0.155362  0.422319]
+ [0.155362  0.422319  0.422319]
+ [0.274069  0.274069  0.451863]]
+```
+
+---
+
+## Estrutura do Repositório
+
+```
+self-attention/
+├── attention.py        # Implementação de softmax e scaled_dot_product_attention
+├── test_attention.py   # Testes de validação numérica
+└── README.md           # Você está aqui
+```
+
+---
+
+## Referência
+
+Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., Kaiser, Ł., & Polosukhin, I. (2017). **Attention Is All You Need**. *Advances in Neural Information Processing Systems*, 30. https://arxiv.org/abs/1706.03762
